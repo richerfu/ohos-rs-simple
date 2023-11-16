@@ -68,7 +68,8 @@ extern "C" {
         this_arg: *mut napi_value,
         data: *mut *mut c_void,
     ) -> napi_status;
-    pub fn napi_get_value_double(env: napi_env, value: napi_value, result: *mut f64) -> napi_status;
+    pub fn napi_get_value_double(env: napi_env, value: napi_value, result: *mut f64)
+        -> napi_status;
     pub fn napi_create_double(env: napi_env, value: f64, result: *mut napi_value) -> napi_status;
     pub fn napi_module_register(mod_: *mut napi_module);
     pub fn napi_define_properties(
@@ -76,5 +77,5 @@ extern "C" {
         object: napi_value,
         property_count: usize,
         properties: *const napi_property_descriptor,
-      ) -> napi_status;
+    ) -> napi_status;
 }

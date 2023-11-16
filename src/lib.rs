@@ -1,4 +1,5 @@
-use std::{ffi::CString, ptr};
+use std::{ffi::c_char, ptr};
+use std::ffi::CString;
 
 mod sys;
 
@@ -38,8 +39,9 @@ unsafe extern "C" fn napi_register_module_v1(
     env: sys::napi_env,
     exports: sys::napi_value,
 ) -> sys::napi_value {
+    let name = CString::new("add").unwrap();
     let desc = [sys::napi_property_descriptor {
-        utf8name: CString::new("add").unwrap().as_ptr().cast(),
+        utf8name: name.as_ptr().cast(),
         name: ptr::null_mut(),
         getter: None,
         setter: None,
