@@ -17,6 +17,8 @@ pub struct napi_env__ {
 
 pub type napi_env = *mut napi_env__;
 
+pub type napi_status = i32;
+
 #[repr(C)]
 #[derive(Copy, Clone)]
 pub struct napi_callback_info__ {
@@ -55,4 +57,24 @@ pub struct napi_module {
     pub nm_modname: *const c_char,
     pub nm_priv: *mut c_void,
     pub reserved: [*mut c_void; 4usize],
+}
+
+extern "C" {
+    pub fn napi_get_cb_info(
+        env: napi_env,
+        cbinfo: napi_callback_info,
+        argc: *mut usize,
+        argv: *mut napi_value,
+        this_arg: *mut napi_value,
+        data: *mut *mut c_void,
+    ) -> napi_status;
+    pub fn napi_get_value_double(env: napi_env, value: napi_value, result: *mut f64) -> napi_status;
+    pub fn napi_create_double(env: napi_env, value: f64, result: *mut napi_value) -> napi_status;
+    pub fn napi_module_register(mod_: *mut napi_module);
+    pub fn napi_define_properties(
+        env: napi_env,
+        object: napi_value,
+        property_count: usize,
+        properties: *const napi_property_descriptor,
+      ) -> napi_status;
 }
