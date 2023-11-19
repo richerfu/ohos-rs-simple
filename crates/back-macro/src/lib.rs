@@ -1,7 +1,6 @@
 use proc_macro::TokenStream;
 use quote::{quote, ToTokens};
 use std::ops::Deref;
-use std::process::id;
 use syn::{ItemFn, Pat::Ident, Type};
 
 struct NapiFnArgs {
