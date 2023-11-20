@@ -1,10 +1,10 @@
 use proc_macro::TokenStream;
-use quote::{quote, ToTokens};
+use quote::quote;
 use std::ops::Deref;
 use syn::{ItemFn, Pat::Ident, Type};
 
 struct NapiFnArgs {
-    ident: syn::Ident,
+    _ident: syn::Ident,
     ty: Type,
 }
 
@@ -21,7 +21,7 @@ pub fn napi(_attr: TokenStream, input: TokenStream) -> TokenStream {
     let fn_blocks = &ast.block;
 
     let ret_ty = match result {
-        syn::ReturnType::Type(_,ty) => quote! { #ty },
+        syn::ReturnType::Type(_, ty) => quote! { #ty },
         syn::ReturnType::Default => quote! { () },
     };
 
@@ -38,16 +38,15 @@ pub fn napi(_attr: TokenStream, input: TokenStream) -> TokenStream {
         .filter_map(|arg| match arg {
             syn::FnArg::Typed(ref p) => {
                 if let Ident(ref ident) = *p.pat {
-                    let param_type = &p.ty;
                     Some(NapiFnArgs {
-                        ident: ident.ident.clone(),
+                        _ident: ident.ident.clone(),
                         ty: p.ty.clone().deref().clone(),
                     })
                 } else {
                     None
                 }
             }
-            syn::FnArg::Receiver(ref p) => None,
+            syn::FnArg::Receiver(ref _p) => None,
         })
         .collect::<Vec<NapiFnArgs>>();
 
@@ -67,7 +66,7 @@ pub fn napi(_attr: TokenStream, input: TokenStream) -> TokenStream {
         proc_macro2::Span::call_site(),
     );
 
-    let run_args = args.iter().enumerate().map(|(index, ident)| {
+    let run_args = args.iter().enumerate().map(|(index, _ident)| {
         let arg = syn::Ident::new(
             format!("arg_{}", index).as_str(),
             proc_macro2::Span::call_site(),
